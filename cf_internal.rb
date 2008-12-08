@@ -42,7 +42,7 @@ class Regexp
 end
 
 class CustomTagReference < InternalReference
-  attr_reader :expected_path
+  attr_reader :expected_path, :resolved_to
   
   class << self
     attr_accessor :directories
@@ -62,5 +62,20 @@ class CustomTagReference < InternalReference
   def initialize(source, text, line)
     super
     @expected_path = text[3, text.size] + ".cfm"
+    @resolved_to = resolve
+  end
+  
+  private
+  
+  def resolve
+    exact_paths = self.class.directories.collect do |dir|
+      exact_path = File.expand_path(expected_path, dir)
+      File.exists_exactly?(exact_path) ? exact_path : nil
+    end.compact
+    return exact_paths.first if exact_paths.first
+    
+    self.class.directories.collect do |dir|
+      File.case_insensitive_canonical_name(File.expand_path(expected_path, dir))
+    end.compact.first
   end
 end
