@@ -3,8 +3,8 @@ require 'spec'
 
 require File.expand_path('../case_check', File.dirname(__FILE__))
 
-describe CfInternalReference do
-  class SampleInternalReference < CfInternalReference
+describe InternalReference do
+  class SampleInternalReference < InternalReference
     attr_accessor :expected_path, :resolved_to
     
     def initialize(expected_path, resolved_to)

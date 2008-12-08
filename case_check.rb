@@ -41,10 +41,4 @@ class ColdFusionSource
     content.split(/(\r\n|\r|\n)/).each_slice(2) { |line_and_br| @lines << line_and_br.join('') }
     @lines
   end
-  
-  private
-  
-  def analyze
-    
-  end
 end

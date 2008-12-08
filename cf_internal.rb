@@ -1,7 +1,7 @@
 # Models of various sorts of file references within CF code
 
 # base class
-class CfInternalReference < Struct.new(:source, :text, :line)
+class InternalReference < Struct.new(:source, :text, :line)
   # abstract methods
   # - expected_path
   #   returns the exact relative path to which this reference refers
@@ -41,7 +41,7 @@ class Regexp
   end
 end
 
-class CustomTagReference < CfInternalReference
+class CustomTagReference < InternalReference
   attr_reader :expected_path
   
   class << self
@@ -61,6 +61,6 @@ class CustomTagReference < CfInternalReference
   
   def initialize(source, text, line)
     super
-    @expected_path = text[3,text.size] + ".cfm"
+    @expected_path = text[3, text.size] + ".cfm"
   end
 end
