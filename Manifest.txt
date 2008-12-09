@@ -1,0 +1,13 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/cf_case_check
+lib/case_check.rb
+lib/case_check/coldfusion_source.rb
+lib/case_check/core-ext.rb
+lib/case_check/internal_reference.rb
+spec/coldfusion_source_spec.rb
+spec/core_ext_spec.rb
+spec/internal_reference_spec.rb
+spec/spec_helper.rb

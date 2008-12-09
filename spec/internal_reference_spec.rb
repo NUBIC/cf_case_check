@@ -1,8 +1,6 @@
-require 'rubygems'
-require 'spec'
 require 'fileutils'
 
-require File.expand_path('../case_check', File.dirname(__FILE__))
+require File.join(File.dirname(__FILE__), %w[spec_helper])
 
 describe InternalReference do
   class SampleInternalReference < InternalReference
@@ -33,7 +31,7 @@ describe CustomTagReference do
   before do
     CustomTagReference.directories = %w(/tmp/customtags)
     CustomTagReference.directories.each { |d| FileUtils.mkdir_p d }
-    @source = ColdFusionSource.new("quux.cfm")
+    @source = ColdfusionSource.new("quux.cfm")
 
     @source.content = <<-CFM
       <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">

@@ -23,24 +23,7 @@ class InternalReference < Struct.new(:source, :text, :line)
   end
 end
 
-class Regexp
-  # Like String#scan, except that it returns an array of MatchData instead of strings
-  # Works incrementally (returning nil) if given a block
-  def scan(s)
-    data = []
-    remaining = s
-    while md = self.match(remaining)
-      if block_given?
-        yield md
-      else
-        data << md
-      end
-      remaining = md.post_match
-    end
-    block_given? ? nil : data
-  end
-end
-
+# Reference as cf_name (or CF_name)
 class CustomTagReference < InternalReference
   attr_reader :expected_path, :resolved_to
   
