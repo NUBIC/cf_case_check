@@ -1,5 +1,7 @@
 # Models of various sorts of file references within CF code
 
+module CaseCheck
+
 # base class
 class InternalReference < Struct.new(:source, :text, :line)
   # abstract methods
@@ -62,3 +64,5 @@ class CustomTagReference < InternalReference
     end.compact.first
   end
 end
+
+end # module CaseCheck

@@ -2,8 +2,8 @@ require 'fileutils'
 
 require File.join(File.dirname(__FILE__), %w[spec_helper])
 
-describe InternalReference do
-  class SampleInternalReference < InternalReference
+describe CaseCheck::InternalReference do
+  class SampleInternalReference < CaseCheck::InternalReference
     attr_accessor :expected_path, :resolved_to
     
     def initialize(expected_path, resolved_to)
@@ -27,11 +27,11 @@ describe InternalReference do
   end
 end
 
-describe CustomTagReference do
+describe CaseCheck::CustomTagReference do
   before do
-    CustomTagReference.directories = %w(/tmp/customtags)
-    CustomTagReference.directories.each { |d| FileUtils.mkdir_p d }
-    @source = ColdfusionSource.new("quux.cfm")
+    CaseCheck::CustomTagReference.directories = %w(/tmp/customtags)
+    CaseCheck::CustomTagReference.directories.each { |d| FileUtils.mkdir_p d }
+    @source = CaseCheck::ColdfusionSource.new("quux.cfm")
 
     @source.content = <<-CFM
       <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -76,11 +76,11 @@ describe CustomTagReference do
   end
   
   after do
-    CustomTagReference.directories.each { |d| FileUtils.rm_r d }
+    CaseCheck::CustomTagReference.directories.each { |d| FileUtils.rm_r d }
   end
   
   def actual_search
-    CustomTagReference.search(@source)
+    CaseCheck::CustomTagReference.search(@source)
   end
   
   it "translates lower case cf_ style" do
@@ -131,14 +131,14 @@ describe CustomTagReference do
   end
   
   it "resolves the exact file if it exists" do
-    expected_file = CustomTagReference.directories.last + "/ActivityLog.cfm"
+    expected_file = CaseCheck::CustomTagReference.directories.last + "/ActivityLog.cfm"
     File.open(expected_file, 'w') { }
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :exact
   end
   
   it "resolves the case-insensitive equivalent if it exists" do
-    expected_file = CustomTagReference.directories.last + "/activitylog.cFM"
+    expected_file = CaseCheck::CustomTagReference.directories.last + "/activitylog.cFM"
     File.open(expected_file, 'w') { }
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :case_insensitive

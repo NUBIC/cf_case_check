@@ -1,6 +1,6 @@
 require 'enumerator'
 
-class ColdfusionSource
+class CaseCheck::ColdfusionSource
   attr_accessor :internal_references, :content, :filename
   
   def self.create(filename)
