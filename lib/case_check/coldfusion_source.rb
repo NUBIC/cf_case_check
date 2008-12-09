@@ -1,6 +1,8 @@
 require 'enumerator'
 
-class CaseCheck::ColdfusionSource
+module CaseCheck
+
+class ColdfusionSource
   attr_accessor :internal_references, :content, :filename
   
   def self.create(filename)
@@ -13,8 +15,24 @@ class CaseCheck::ColdfusionSource
     self.content = content
   end
   
+  def analyze
+    internal_references.concat CustomTagReference.search(self)
+  end
+  
   def internal_references
     @internal_references ||= []
+  end
+  
+  def unresolved_internal_references
+    internal_references.select { |ir| ir.resolution.nil? }
+  end
+  
+  def case_sensitive_internal_references
+    internal_references.select { |ir| ir.resolution == :case_sensitive }
+  end
+  
+  def exact_internal_references
+    internal_references - unresolved_internal_references - case_sensitive_internal_references
   end
   
   # returns the line number (1-based) on which the given character index lies
@@ -40,4 +58,6 @@ class CaseCheck::ColdfusionSource
     content.split(/(\r\n|\r|\n)/).each_slice(2) { |line_and_br| @lines << line_and_br.join('') }
     @lines
   end
+end
+
 end

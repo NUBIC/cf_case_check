@@ -1,8 +1,42 @@
 #!/usr/bin/env ruby
 
 require File.expand_path(
-    File.join(File.dirname(__FILE__), %w[.. lib cf_case_check]))
+    File.join(File.dirname(__FILE__), %w[.. lib case_check]))
 
-# Put your code here
+module CaseCheck
 
-# EOF
+class Checker
+  def initialize(config_file, root)
+    @config = Configuration.new(config_file)
+    $stderr.print "Reading source files "
+    @sources = Dir["#{root}/**/*.cf[mc]"].collect do |f|
+      $stderr.print '.'
+      ColdfusionSource.create(f)
+    end
+    $stderr.puts
+    $stderr.print "Analyzing "
+    @sources.each do |s|
+      $stderr.print '.'
+      s.analyze
+    end
+    $stderr.puts
+  end
+  
+  def print_report(out=$stdout)
+    $stderr.puts @sources.inject(0) { |c, s| c + s.internal_references.size }
+    @sources.select { |s| !s.unresolved_internal_references.empty? || !s.case_sensitive_internal_references.empty? }.each do |s|
+      out.puts s.filename
+      s.unresolved_internal_references.each do |unr|
+        out.puts " - Unresolved ref on #{unr.line}: #{unr.text}"
+      end
+      s.case_sensitive_internal_references.each do |ci|
+        out.puts " + Case sensitive ref on #{ci.line}: #{ci.text}"
+      end
+    end
+  end
+end
+
+end
+
+
+CaseCheck::Checker.new('cf_case_check.yml', 'webroot').print_report
