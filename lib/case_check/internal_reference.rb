@@ -1,5 +1,7 @@
 # Models of various sorts of file references within CF code
 
+require 'activesupport'
+
 module CaseCheck
 
 # base class
@@ -16,6 +18,28 @@ class InternalReference < Struct.new(:source, :text, :line)
   def resolution
     return nil unless resolved_to
     case_sensitive_match? ? :exact : :case_insensitive
+  end
+  
+  def message
+    start = 
+      case resolution
+      when :exact
+        "Exactly resolved"
+      when :case_insensitive
+        "Case-insensitively resolved"
+      else
+        "Unresolved"
+      end
+    msg = "#{start} #{type_name} on line #{line}"
+    if resolution
+      "#{msg} from #{text} to #{resolved_to}"
+    else
+      "#{msg}: #{text}"
+    end
+  end
+  
+  def type_name
+    self.class.name.underscore.gsub('_', ' ')
   end
   
   protected
@@ -48,6 +72,10 @@ class CustomTagReference < InternalReference
     super
     @expected_path = text[3, text.size] + ".cfm"
     @resolved_to = resolve
+  end
+  
+  def type_name
+    'customtag'
   end
   
   private

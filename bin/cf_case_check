@@ -19,19 +19,27 @@ class Checker
       $stderr.print '.'
       s.analyze
     end
-    $stderr.puts
+    $stderr.puts "\n"
   end
   
   def print_report(out=$stdout)
     $stderr.puts @sources.inject(0) { |c, s| c + s.internal_references.size }
     @sources.select { |s| !s.unresolved_internal_references.empty? || !s.case_sensitive_internal_references.empty? }.each do |s|
       out.puts s.filename
-      s.unresolved_internal_references.each do |unr|
-        out.puts " - Unresolved ref on #{unr.line}: #{unr.text}"
+      s.internal_references.each do |ir|
+        out.puts " #{bullet(ir)} #{ir.message}"
       end
-      s.case_sensitive_internal_references.each do |ci|
-        out.puts " + Case sensitive ref on #{ci.line}: #{ci.text}"
-      end
+    end
+  end
+  
+  def bullet(ir)
+    case ir.resolution
+    when :exact
+      '-'
+    when :case_insensitive
+      '+'
+    else
+      '*'
     end
   end
 end

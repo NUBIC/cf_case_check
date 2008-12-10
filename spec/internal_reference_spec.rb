@@ -6,9 +6,11 @@ describe CaseCheck::InternalReference do
   class SampleInternalReference < CaseCheck::InternalReference
     attr_accessor :expected_path, :resolved_to
     
-    def initialize(expected_path, resolved_to)
+    def initialize(expected_path, resolved_to, line=0, text=nil)
       self.expected_path = expected_path
       self.resolved_to = resolved_to
+      self.line = line
+      self.text = text
     end
   end
   
@@ -23,6 +25,23 @@ describe CaseCheck::InternalReference do
   
     it 'is unresolved without resolved_to' do
       SampleInternalReference.new("/foo/patient.cfm", nil).resolution.should be_nil
+    end
+  end
+  
+  describe 'default message' do
+    it "indicates when it is unresolved" do
+      SampleInternalReference.new("/foo/patient.cfm", nil, 11, "FOO_Patient").message.should == 
+        "Unresolved sample internal reference on line 11: FOO_Patient"
+    end
+
+    it "indicates when it is exactly resolved" do
+      SampleInternalReference.new("/foo/patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm", 11, "foo_patient").message.should == 
+        "Exactly resolved sample internal reference on line 11 from foo_patient to /home/cfcode/apps/notis/foo/patient.cfm"
+    end
+
+    it "indicates when it is only case-insensitively resolved" do
+      SampleInternalReference.new("/foo/Patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm", 11, "foo_Patient").message.should == 
+        "Case-insensitively resolved sample internal reference on line 11 from foo_Patient to /home/cfcode/apps/notis/foo/patient.cfm"
     end
   end
 end
@@ -81,6 +100,10 @@ describe CaseCheck::CustomTagReference do
   
   def actual_search
     CaseCheck::CustomTagReference.search(@source)
+  end
+  
+  it "has a human-readable name" do
+    actual_search.first.type_name.should == 'customtag'
   end
   
   it "translates lower case cf_ style" do
