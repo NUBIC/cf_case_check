@@ -115,28 +115,28 @@ describe CaseCheck::CustomTag do
   
   it "resolves an exactly matching file in the same directory as the source if it exists" do
     expected_file = "/tmp/ctr_specs/theapp/ActivityLog.cfm"
-    File.open(expected_file, 'w') { }
+    FileUtils.touch expected_file
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :exact
   end
   
   it "resolves the case-insensitive equivalent in the same directory as the source if it exists" do
     expected_file = "/tmp/ctr_specs/theapp/ActivityLOG.cfm"
-    File.open(expected_file, 'w') { }
+    FileUtils.touch expected_file
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :case_insensitive
   end
   
   it "resolves the exact file from one of the customtag directories if it exists" do
     expected_file = CaseCheck::CustomTag.directories.last + "/ActivityLog.cfm"
-    File.open(expected_file, 'w') { }
+    FileUtils.touch expected_file
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :exact
   end
   
   it "resolves the case-insensitive equivalent from one of the customtag directories if it exists" do
     expected_file = CaseCheck::CustomTag.directories.last + "/activitylog.cFM"
-    File.open(expected_file, 'w') { }
+    FileUtils.touch expected_file
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :case_insensitive
   end
