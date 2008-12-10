@@ -28,7 +28,7 @@ describe CaseCheck::Configuration do
         - /home/cf/customtags
     YAML
     read_config
-    CaseCheck::CustomTagReference.directories.should == %w(/var/www/customtags /home/cf/customtags)
+    CaseCheck::CustomTag.directories.should == %w(/var/www/customtags /home/cf/customtags)
   end
   
   it "resolves relative customtag directories against the config file directory" do
@@ -37,6 +37,6 @@ describe CaseCheck::Configuration do
         - zappo/customtags
     YAML
     read_config
-    CaseCheck::CustomTagReference.directories.should == %w(/tmp/cf_case_check/zappo/customtags)
+    CaseCheck::CustomTag.directories.should == %w(/tmp/cf_case_check/zappo/customtags)
   end
 end

@@ -22,7 +22,7 @@ class Configuration
   
   def read_customtag_dirs
     dirs = @doc['customtags'] || []
-    CustomTagReference.directories = dirs.to_a.collect { |d|
+    CustomTag.directories = dirs.to_a.collect { |d|
       p = Pathname.new(d)
       if p.absolute?
         p

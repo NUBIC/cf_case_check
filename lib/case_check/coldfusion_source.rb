@@ -16,7 +16,7 @@ class ColdfusionSource
   end
   
   def analyze
-    internal_references.concat CustomTagReference.search(self)
+    internal_references.concat CustomTag.search(self)
   end
   
   def internal_references

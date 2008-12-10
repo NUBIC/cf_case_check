@@ -1,55 +1,10 @@
 require 'fileutils'
+require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
-require File.join(File.dirname(__FILE__), %w[spec_helper])
-
-describe CaseCheck::InternalReference do
-  class SampleInternalReference < CaseCheck::InternalReference
-    attr_accessor :expected_path, :resolved_to
-    
-    def initialize(expected_path, resolved_to, line=0, text=nil)
-      self.expected_path = expected_path
-      self.resolved_to = resolved_to
-      self.line = line
-      self.text = text
-    end
-  end
-  
-  describe 'default resolution' do
-    it 'is exact when resolved_to ends with expected_path' do
-      SampleInternalReference.new("/foo/patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm").resolution.should == :exact
-    end
-  
-    it 'is case sensitive when resolved_to ends with something else' do
-      SampleInternalReference.new("/foo/Patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm").resolution.should == :case_insensitive
-    end
-  
-    it 'is unresolved without resolved_to' do
-      SampleInternalReference.new("/foo/patient.cfm", nil).resolution.should be_nil
-    end
-  end
-  
-  describe 'default message' do
-    it "indicates when it is unresolved" do
-      SampleInternalReference.new("/foo/patient.cfm", nil, 11, "FOO_Patient").message.should == 
-        "Unresolved sample internal reference on line 11: FOO_Patient"
-    end
-
-    it "indicates when it is exactly resolved" do
-      SampleInternalReference.new("/foo/patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm", 11, "foo_patient").message.should == 
-        "Exactly resolved sample internal reference on line 11 from foo_patient to /home/cfcode/apps/notis/foo/patient.cfm"
-    end
-
-    it "indicates when it is only case-insensitively resolved" do
-      SampleInternalReference.new("/foo/Patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm", 11, "foo_Patient").message.should == 
-        "Case-insensitively resolved sample internal reference on line 11 from foo_Patient to /home/cfcode/apps/notis/foo/patient.cfm"
-    end
-  end
-end
-
-describe CaseCheck::CustomTagReference do
+describe CaseCheck::CustomTag do
   before(:each) do
-    CaseCheck::CustomTagReference.directories = %w(/tmp/ctr_specs/customtags)
-    CaseCheck::CustomTagReference.directories.each { |d| FileUtils.mkdir_p d }
+    CaseCheck::CustomTag.directories = %w(/tmp/ctr_specs/customtags)
+    CaseCheck::CustomTag.directories.each { |d| FileUtils.mkdir_p d }
     filename = "/tmp/ctr_specs/theapp/quux.cfm"
     FileUtils.mkdir_p File.dirname(filename)
     
@@ -104,7 +59,7 @@ describe CaseCheck::CustomTagReference do
   end
   
   def actual_search
-    CaseCheck::CustomTagReference.search(@source)
+    CaseCheck::CustomTag.search(@source)
   end
   
   it "has a human-readable name" do
@@ -173,14 +128,14 @@ describe CaseCheck::CustomTagReference do
   end
   
   it "resolves the exact file from one of the customtag directories if it exists" do
-    expected_file = CaseCheck::CustomTagReference.directories.last + "/ActivityLog.cfm"
+    expected_file = CaseCheck::CustomTag.directories.last + "/ActivityLog.cfm"
     File.open(expected_file, 'w') { }
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :exact
   end
   
   it "resolves the case-insensitive equivalent from one of the customtag directories if it exists" do
-    expected_file = CaseCheck::CustomTagReference.directories.last + "/activitylog.cFM"
+    expected_file = CaseCheck::CustomTag.directories.last + "/activitylog.cFM"
     File.open(expected_file, 'w') { }
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :case_insensitive
