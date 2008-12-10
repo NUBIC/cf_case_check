@@ -134,4 +134,11 @@ describe CaseCheck::CustomTag do
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :case_insensitive
   end
+
+  it "resolves the file from a subdirectory of one of customtag directories" do
+    expected_file = CaseCheck::CustomTag.directories.last + "/pkg/foo/ActivityLog.cfm"
+    touch expected_file
+    actual_search.first.resolved_to.should == expected_file
+    actual_search.first.resolution.should == :exact
+  end
 end

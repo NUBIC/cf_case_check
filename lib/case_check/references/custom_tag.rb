@@ -12,6 +12,20 @@ module CaseCheck
           self.new(source, match_data[1], line_number)
         end
       end
+      
+      def recursive_directories
+        directories + directories.collect do |dir|
+          collect_subdirs(dir)
+        end.flatten
+      end
+      
+      private
+      
+      def collect_subdirs(start)
+        [start] + Dir[File.join(start, '*')].select { |f| File.directory?(f) }.collect do |dir|
+          collect_subdirs(dir)
+        end.flatten
+      end
     end
 
     def initialize(source, text, line)
@@ -27,7 +41,7 @@ module CaseCheck
     private
 
     def resolve
-      [File.dirname(source.filename), self.class.directories].flatten.inject(nil) do |resolved, dir|
+      [File.dirname(source.filename), self.class.recursive_directories].flatten.inject(nil) do |resolved, dir|
         resolved || resolve_in(dir)
       end
     end
