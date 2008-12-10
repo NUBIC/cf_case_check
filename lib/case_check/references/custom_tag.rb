@@ -31,12 +31,6 @@ module CaseCheck
         resolved || resolve_in(dir)
       end
     end
-
-    def resolve_in(dir)
-      exact_path = File.expand_path(expected_path, dir)
-      return exact_path if File.exists_exactly?(exact_path)
-      File.case_insensitive_canonical_name(exact_path)
-    end
   end
   
 end

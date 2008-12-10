@@ -48,6 +48,10 @@ class Reference < Struct.new(:source, :text, :line)
   def case_sensitive_match?
     resolved_to[-1 * expected_path.size, expected_path.size] == expected_path
   end
+
+  def resolve_in(dir)
+    File.case_insensitive_canonical_name(File.expand_path(expected_path, dir))
+  end
 end
 
 end # module CaseCheck
