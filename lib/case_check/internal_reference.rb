@@ -81,15 +81,15 @@ class CustomTagReference < InternalReference
   private
   
   def resolve
-    exact_paths = self.class.directories.collect do |dir|
-      exact_path = File.expand_path(expected_path, dir)
-      File.exists_exactly?(exact_path) ? exact_path : nil
-    end.compact
-    return exact_paths.first if exact_paths.first
-    
-    self.class.directories.collect do |dir|
-      File.case_insensitive_canonical_name(File.expand_path(expected_path, dir))
-    end.compact.first
+    [File.dirname(source.filename), self.class.directories].flatten.inject(nil) do |resolved, dir|
+      resolved || resolve_in(dir)
+    end
+  end
+  
+  def resolve_in(dir)
+    exact_path = File.expand_path(expected_path, dir)
+    return exact_path if File.exists_exactly?(exact_path)
+    File.case_insensitive_canonical_name(exact_path)
   end
 end
 
