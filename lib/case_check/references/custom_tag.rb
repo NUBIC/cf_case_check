@@ -8,14 +8,9 @@ module CaseCheck
       attr_accessor :directories
 
       def search(source)
-        refs = []
-        char_offset = 0
-        /<(CF_(\w+))/i.scan(source.content) do |md|
-          refs << self.new(source, md[1], source.line_of(char_offset + md.begin(0)))
-          char_offset += md[0].size + md.pre_match.size
-          remaining = md.post_match
+        source.scan(/<(CF_(\w+))/i) do |match_data, line_number|
+          self.new(source, match_data[1], line_number)
         end
-        refs
       end
     end
 

@@ -5,53 +5,47 @@ describe CaseCheck::CustomTag do
   before(:each) do
     CaseCheck::CustomTag.directories = %w(/tmp/ctr_specs/customtags)
     CaseCheck::CustomTag.directories.each { |d| FileUtils.mkdir_p d }
-    filename = "/tmp/ctr_specs/theapp/quux.cfm"
-    FileUtils.mkdir_p File.dirname(filename)
-    
-    File.open(filename, 'w') do |f|
-      f.write <<-CFM
-        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-        <html>
-        <head>
-        	<title>Delete Risk Factors</title>
-        </head>
 
-        <body>
-        		<CFQUERY NAME="DELETEPD" datasource=#application.db#>
-        		UPDATE T_BRST_CIGALCHL 
-        		SET IS_DELETED = 'Y',
-        		CHANGED_DATE = SYSDATE,
-        		CHANGED_BY = '#session.netid#',
-        		CHANGED_IP= '#cgi.remote_addr#'
-        		WHERE PATIENT_ID = #URL.PATIENT_ID#
-        		</CFQUERY>
+    @source = create_test_source("/tmp/ctr_specs/theapp/quux.cfm", <<-CFM)
+      <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+      <html>
+      <head>
+      	<title>Delete Risk Factors</title>
+      </head>
 
-        		<CF_ActivityLog activity_type="DELETE T_BRST_CIGALCHL" target="PATIENT_ID = #URL.PATIENT_ID#">
+      <body>
+      		<CFQUERY NAME="DELETEPD" datasource=#application.db#>
+      		UPDATE T_BRST_CIGALCHL 
+      		SET IS_DELETED = 'Y',
+      		CHANGED_DATE = SYSDATE,
+      		CHANGED_BY = '#session.netid#',
+      		CHANGED_IP= '#cgi.remote_addr#'
+      		WHERE PATIENT_ID = #URL.PATIENT_ID#
+      		</CFQUERY>
+
+      		<CF_ActivityLog activity_type="DELETE T_BRST_CIGALCHL" target="PATIENT_ID = #URL.PATIENT_ID#">
 
 
-        <CFOUTPUT>
-        <CF_DeleteRecordLog 
-        PATIENT_ID=#URL.PATIENT_ID#
-        SSN="#URL.SSN#"
-        LAST_NAME="#URL.LAST_NAME#"
-        FIRST_NAME="#URL.FIRST_NAME#"
-        MIDDLE_NAME="#URL.MI#"
-        DESCRIPTION="Alcohol & Cigarettes"
-        TABLE_NAME="T_BRST_CIGALCHL"
-        REVERSED_CODE="PATIENT_ID = #URL.PATIENT_ID#"
-        >
-        </CFOUTPUT>
+      <CFOUTPUT>
+      <CF_DeleteRecordLog 
+      PATIENT_ID=#URL.PATIENT_ID#
+      SSN="#URL.SSN#"
+      LAST_NAME="#URL.LAST_NAME#"
+      FIRST_NAME="#URL.FIRST_NAME#"
+      MIDDLE_NAME="#URL.MI#"
+      DESCRIPTION="Alcohol & Cigarettes"
+      TABLE_NAME="T_BRST_CIGALCHL"
+      REVERSED_CODE="PATIENT_ID = #URL.PATIENT_ID#"
+      >
+      </CFOUTPUT>
 
-        </body>
-        </html>
+      </body>
+      </html>
 
-        <SCRIPT LANGUAGE = "JavaScript1.2">
-         this.window.close();
-        </SCRIPT>
-      CFM
-    end
-
-    @source = CaseCheck::ColdfusionSource.create(filename)
+      <SCRIPT LANGUAGE = "JavaScript1.2">
+       this.window.close();
+      </SCRIPT>
+    CFM
   end
   
   after(:each) do

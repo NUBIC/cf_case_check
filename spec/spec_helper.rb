@@ -11,4 +11,14 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
 end
 
+def create_test_source(filename, content)
+  FileUtils.mkdir_p File.dirname(filename)
+  
+  File.open(filename, 'w') do |f|
+    f.write content
+  end
+  
+  CaseCheck::ColdfusionSource.create(filename)
+end
+
 # EOF
