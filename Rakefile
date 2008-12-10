@@ -13,6 +13,7 @@ ensure_in_path 'lib'
 require 'case_check'
 
 task :default => 'spec:run'
+task :install => 'gem:install'
 
 PROJ.name = 'cf_case_check'
 PROJ.authors = 'Rhett Sutphin'
@@ -24,4 +25,3 @@ PROJ.version = CaseCheck::VERSION
 PROJ.ruby_opts = [] # There are a bunch of warnings in rspec, so setting -w isn't useful
 PROJ.spec.opts << '--color'
 
-# EOF
