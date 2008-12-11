@@ -81,10 +81,6 @@ end
 
 describe CaseCheck::Cfmodule::Template do
   before(:each) do
-    # cfmodule with the name attribute searches in the custom tag directories
-    CaseCheck::CustomTag.directories = %w(/tmp/cfmod_specs/customtags)
-    CaseCheck::CustomTag.directories.each { |d| FileUtils.mkdir_p d }
-    
     @source = create_test_source("/tmp/cfmod_specs/theapp/quux.cfm", <<-CFM)
       <CFOUTPUT>
               <CFIF StoredQueryID GT 0>
