@@ -34,10 +34,6 @@ module CaseCheck
       @resolved_to = resolve
     end
 
-    def type_name
-      'customtag'
-    end
-
     private
 
     def resolve

@@ -57,7 +57,7 @@ describe CaseCheck::CustomTag do
   end
   
   it "has a human-readable name" do
-    actual_search.first.type_name.should == 'customtag'
+    actual_search.first.type_name.should == 'custom tag'
   end
   
   it "translates lower case cf_ style" do
