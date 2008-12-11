@@ -24,4 +24,4 @@ PROJ.version = CaseCheck::VERSION
 
 PROJ.ruby_opts = [] # There are a bunch of warnings in rspec, so setting -w isn't useful
 PROJ.spec.opts << '--color'
-
+PROJ.rcov.opts << '--exclude /Library'
