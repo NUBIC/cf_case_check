@@ -17,12 +17,22 @@ class Configuration
   private
   
   def apply
-    read_customtag_dirs
+    read_custom_tag_dirs
+    read_cfc_dirs
   end
   
-  def read_customtag_dirs
-    dirs = @doc['customtags'] || []
-    CustomTag.directories = dirs.to_a.collect { |d|
+  def read_custom_tag_dirs
+    CustomTag.directories = absolutize_directories(@doc['customtags'] || [])
+  end
+  
+  def read_cfc_dirs
+    Cfc.directories = absolutize_directories(@doc['components'] || [])
+  end
+  
+  private
+  
+  def absolutize_directories(dirs)
+    dirs.to_a.collect { |d|
       p = Pathname.new(d)
       if p.absolute?
         p

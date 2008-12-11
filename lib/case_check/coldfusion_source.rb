@@ -16,7 +16,7 @@ class ColdfusionSource
   end
   
   def analyze
-    [CustomTag, Cfmodule, Cfinclude].each do |reftype|
+    [CustomTag, Cfmodule, Cfinclude, Cfc].each do |reftype|
       internal_references.concat reftype.search(self)
     end
   end

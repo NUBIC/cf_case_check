@@ -46,8 +46,11 @@ class Reference < Struct.new(:source, :text, :line)
   protected
   
   def case_sensitive_match?
-    tail = expected_path.split('/').reject { |pe| pe == '.' }.join('/').gsub(%r((\.\./)+), '')
-    resolved_to[-1 * tail.size, tail.size] == tail
+    resolved_to.ends_with?(expected_path_tail)
+  end
+  
+  def expected_path_tail
+    expected_path.split('/').reject { |pe| pe == '.' }.join('/').gsub(%r((\.\./)+), '')
   end
 
   def resolve_in(dir)
