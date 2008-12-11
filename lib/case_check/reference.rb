@@ -40,13 +40,14 @@ class Reference < Struct.new(:source, :text, :line)
   end
   
   def type_name
-    self.class.name.underscore.gsub('_', ' ')
+    self.class.name.split('::').last.underscore.gsub('_', ' ')
   end
   
   protected
   
   def case_sensitive_match?
-    resolved_to[-1 * expected_path.size, expected_path.size] == expected_path
+    tail = expected_path.split('/').reject { |pe| pe == '.' }.join('/').gsub(%r((\.\./)+), '')
+    resolved_to[-1 * tail.size, tail.size] == tail
   end
 
   def resolve_in(dir)

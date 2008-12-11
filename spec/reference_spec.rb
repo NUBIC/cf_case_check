@@ -19,6 +19,10 @@ describe CaseCheck::Reference do
       SampleReference.new("/foo/patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm").resolution.should == :exact
     end
   
+    it 'is exact when resolved_to ends with expected_path, disregarding ../.' do
+      SampleReference.new(".././foo/patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm").resolution.should == :exact
+    end
+  
     it 'is case sensitive when resolved_to ends with something else' do
       SampleReference.new("/foo/Patient.cfm", "/home/cfcode/apps/notis/foo/patient.cfm").resolution.should == :case_insensitive
     end
