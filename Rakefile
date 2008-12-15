@@ -17,11 +17,14 @@ task :install => 'gem:install'
 
 PROJ.name = 'cf_case_check'
 PROJ.authors = 'Rhett Sutphin'
-PROJ.email = 'r-sutphin@northwestern.edu'
-# PROJ.url = 'FIXME (project homepage)'
+PROJ.email = 'rhett@detailedbalance.net'
+PROJ.url = 'http://github.com/rsutphin/cf_case_check'
 PROJ.version = CaseCheck::VERSION
 # PROJ.rubyforge.name = 'cf_case_check'
+PROJ.description = "A utility which walks a ColdFusion application's source and determines which includes, custom tags, etc, will not work with a case-sensitive filesystem"
 
 PROJ.ruby_opts = [] # There are a bunch of warnings in rspec, so setting -w isn't useful
 PROJ.spec.opts << '--color'
 PROJ.rcov.opts << '--exclude /Library'
+
+PROJ.gem.dependencies << 'activesupport'
