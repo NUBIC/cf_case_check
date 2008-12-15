@@ -1,3 +1,7 @@
+0.0.1 / 2008-12-14
+==================
+* Fix recursion bug in CaseCheck::exit
+
 0.0.0 / 2008-12-14
 ==================
 * Initial release
