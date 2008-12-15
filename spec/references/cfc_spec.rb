@@ -66,4 +66,12 @@ describe CaseCheck::Cfc do
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :exact
   end
+  
+  it "performs substitutions before attempting to resolve" do
+    @source.content = <<-CFM
+      CreateObject("component", application.pathToComponents&"Personnel")
+    CFM
+    CaseCheck::Reference.substitutions << [/application.pathToComponents&/i, "pipes."]
+    actual_search.first.expected_path.should == "pipes/Personnel.cfc"
+  end
 end

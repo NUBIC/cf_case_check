@@ -24,7 +24,7 @@ module CaseCheck
     
     def initialize(source, text, line_number)
       super
-      @expected_path = text.gsub('.', '/') + ".cfc"
+      @expected_path = substituted_text.gsub('.', '/') + ".cfc"
       @resolved_to = search_path.inject(nil) do |resolved, dir|
         resolved || resolve_in(dir)
       end

@@ -10,15 +10,12 @@ class Configuration
     apply
   end
   
-  def [](k)
-    @doc[k]
-  end
-  
   private
   
   def apply
     read_custom_tag_dirs
     read_cfc_dirs
+    read_substitutions
   end
   
   def read_custom_tag_dirs
@@ -27,6 +24,14 @@ class Configuration
   
   def read_cfc_dirs
     Cfc.directories = absolutize_directories(@doc['cfc_directories'] || [])
+  end
+  
+  def read_substitutions
+    if @doc['substitutions']
+      @doc['substitutions'].each_pair do |re, repl|
+        CaseCheck::Reference.substitutions << [Regexp.new(re, Regexp::IGNORECASE), repl]
+      end
+    end
   end
   
   private

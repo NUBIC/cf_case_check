@@ -9,6 +9,7 @@ Spec::Runner.configure do |config|
   
   config.after do
     CaseCheck.status_stream = nil
+    CaseCheck::Reference.substitutions.clear
   end
 
   # == Mock Framework

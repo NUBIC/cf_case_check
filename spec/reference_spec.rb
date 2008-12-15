@@ -32,6 +32,21 @@ describe CaseCheck::Reference do
     end
   end
   
+  describe "text substitution" do
+    it "has none by default" do
+      CaseCheck::Reference.substitutions.should == []
+    end
+    
+    it "subs in the first matching option" do
+      CaseCheck::Reference.substitutions << [/#application#/i, 'foo'] << [/#app.*?#/i, 'bar']
+      SampleReference.new(nil, nil, 0, "#application#/quux").substituted_text.should == "foo/quux"
+    end
+    
+    it "returns the original text if there are no matching subs" do
+      SampleReference.new(nil, nil, 0, "#application#/quux").substituted_text.should == "#application#/quux"
+    end
+  end
+  
   describe 'default message' do
     it "indicates when it is unresolved" do
       SampleReference.new("/foo/patient.cfm", nil, 11, "FOO_Patient").message.should == 

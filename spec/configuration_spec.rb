@@ -39,4 +39,14 @@ describe CaseCheck::Configuration do
     read_config
     CaseCheck::CustomTag.directories.should == %w(/tmp/cf_case_check/zappo/customtags)
   end
+  
+  it "reads substitutions" do
+    config_file <<-YAML
+      substitutions:
+        '#application.cfcPath#': /var/www/cfcs
+    YAML
+    read_config
+    CaseCheck::Reference.should have(1).substitutions
+    CaseCheck::Reference.substitutions.first.should == [/#application.cfcPath#/i, '/var/www/cfcs']
+  end
 end

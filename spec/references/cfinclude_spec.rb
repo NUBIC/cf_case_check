@@ -63,4 +63,12 @@ describe CaseCheck::Cfinclude do
     CFM
     actual_search.should have(1).reference
   end
+  
+  it "performs substitutions before resolving" do
+    @source.content = <<-CFM
+      <cfinclude template="#application.myroot#whatever.cfm">
+    CFM
+    CaseCheck::Reference.substitutions << [/#application.myroot#/, 'etc/']
+    actual_search.first.expected_path.should == 'etc/whatever.cfm'
+  end
 end

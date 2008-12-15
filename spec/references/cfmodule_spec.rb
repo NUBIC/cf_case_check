@@ -76,6 +76,14 @@ describe CaseCheck::Cfmodule::Name do
     CFM
     actual_search.should have(1).reference
   end
+  
+  it "performs substitutions before resolving" do
+    @source.content = <<-CFM
+      <cfmodule name="#application.myroot#whatever">
+    CFM
+    CaseCheck::Reference.substitutions << [/#application.myroot#/, 'etc.']
+    actual_search.first.expected_path.should == 'etc/whatever.cfm'
+  end
 end
 
 describe CaseCheck::Cfmodule::Template do
@@ -135,5 +143,14 @@ describe CaseCheck::Cfmodule::Template do
       <cfMODule template="whatever">
     CFM
     actual_search.should have(1).reference
+  end
+
+  
+  it "performs substitutions before resolving" do
+    @source.content = <<-CFM
+      <cfmodule template="#application.somePath#whatever.cfm">
+    CFM
+    CaseCheck::Reference.substitutions << [/#application.somePath#/, 'etc/']
+    actual_search.first.expected_path.should == 'etc/whatever.cfm'
   end
 end

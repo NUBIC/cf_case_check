@@ -5,8 +5,14 @@ require 'activesupport'
 
 module CaseCheck
 
-# base class
+# abstract base class
 class Reference < Struct.new(:source, :text, :line)
+  class << self
+    def substitutions
+      @substitutions ||= []
+    end
+  end
+  
   # abstract methods
   # - expected_path
   #   returns the exact relative path to which this reference refers
@@ -41,6 +47,15 @@ class Reference < Struct.new(:source, :text, :line)
   
   def type_name
     self.class.name.split('::').last.underscore.gsub('_', ' ')
+  end
+  
+  def substituted_text
+    re, sub = CaseCheck::Reference.substitutions.detect { |expr, _| expr =~ text }
+    if re
+      text.sub(re, sub)
+    else
+      text
+    end
   end
   
   protected

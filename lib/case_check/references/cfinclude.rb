@@ -12,7 +12,7 @@ module CaseCheck
 
     def initialize(source, text, line)
       super
-      @expected_path = text
+      @expected_path = substituted_text
       @resolved_to = resolve_in(File.dirname(source.filename))
     end
   end

@@ -21,7 +21,7 @@ module CaseCheck
     class Name < Cfmodule
       def initialize(source, text, line)
         super
-        @expected_path = text.gsub('.', '/') + ".cfm"
+        @expected_path = substituted_text.gsub('.', '/') + ".cfm"
         @resolved_to = CustomTag.directories.inject(nil) do |resolved, dir|
           resolved || resolve_in(dir)
         end
@@ -35,7 +35,7 @@ module CaseCheck
     class Template < Cfmodule
       def initialize(source, text, line)
         super
-        @expected_path = text
+        @expected_path = substituted_text
         @resolved_to = resolve_in(File.dirname(source.filename))
       end
       
