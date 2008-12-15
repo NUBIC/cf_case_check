@@ -33,6 +33,7 @@ PROJ.gem.dependencies << 'activesupport'
 desc 'Regenerate the gemspec for github'
 task :'gem:spec' => 'gem:prereqs' do
   PROJ.gem._spec.files = PROJ.gem._spec.files.reject { |f| f =~ /^tasks/ }
+  PROJ.gem._spec.rubyforge_project = nil
   File.open("#{PROJ.name}.gemspec", 'w') do |gemspec|
     gemspec.puts PROJ.gem._spec.to_ruby
   end
