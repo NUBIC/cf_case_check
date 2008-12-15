@@ -11,6 +11,14 @@ module CaseCheck
   def self.version
     VERSION
   end
+  
+  def self.status_stream
+    @stderr ||= $stderr
+  end
+  
+  def self.status_stream=(err)
+    @stderr = err
+  end
 
   # Returns the library path for the module. If any arguments are given,
   # they will be joined to the end of the libray path using
@@ -39,6 +47,10 @@ module CaseCheck
         ::File.join(::File.dirname(fname), dir, '*.rb'))
 
     Dir.glob(search_me).sort.each {|rb| require rb}
+  end
+  
+  def self.exit
+    exit
   end
 
 end  # module CaseCheck
