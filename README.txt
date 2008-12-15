@@ -10,6 +10,11 @@ determines which references to other files will not work with a case-sensitive
 filesystem.  Its intended audience is developers/sysadmins who are migrating
 a CF application from Windows hosting to Linux or another UNIX.
 
+`cf_case_check` was developed at the [Northwestern University Biomedical
+Informatics Center][NUBIC].
+
+[NUBIC]: http://www.nucats.northwestern.edu/centers/nubic/index.html
+
 Features
 --------
 
