@@ -5,7 +5,11 @@ module CaseCheck
     attr_reader :expected_path, :resolved_to
     
     class << self
-      attr_accessor :directories
+      attr_writer :directories
+      
+      def directories
+        @directories ||= []
+      end
       
       def search(source)
         source.scan(/createObject\((.*?)\)/mi) do |match, l|

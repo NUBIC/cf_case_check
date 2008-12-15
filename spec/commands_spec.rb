@@ -89,4 +89,15 @@ describe CaseCheck::Params do
       CaseCheck.status_stream.string.should include("dir")
     end
   end
+  
+  describe "--verbose" do
+    it "sets the verbose flag" do
+      actual_params('--verbose').should be_verbose
+      actual_params('-v').should be_verbose
+    end
+    
+    it "does not set the verbose flag when omitted" do
+      actual_params.should_not be_verbose
+    end
+  end
 end

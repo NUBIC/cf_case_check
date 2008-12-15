@@ -5,8 +5,12 @@ module CaseCheck
     attr_reader :expected_path, :resolved_to
 
     class << self
-      attr_accessor :directories
-
+      attr_writer :directories
+      
+      def directories
+        @directories ||= []
+      end
+      
       def search(source)
         source.scan(/<(CF_(\w+))/i) do |match_data, line_number|
           self.new(source, match_data[1], line_number)

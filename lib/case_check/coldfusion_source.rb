@@ -25,16 +25,8 @@ class ColdfusionSource
     @internal_references ||= []
   end
   
-  def unresolved_internal_references
-    internal_references.select { |ir| ir.resolution.nil? }
-  end
-  
-  def case_insensitive_internal_references
-    internal_references.select { |ir| ir.resolution == :case_insensitive }
-  end
-  
-  def exact_internal_references
-    internal_references - unresolved_internal_references - case_insensitive_internal_references
+  def inexact_internal_references
+    internal_references.reject { |ir| ir.resolution == :exact }
   end
   
   # returns the line number (1-based) on which the given character index lies
