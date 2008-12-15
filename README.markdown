@@ -1,12 +1,11 @@
-cf_case_check
-=============
-    by Rhett Sutphin
-    http://github.com/rsutphin/cf_case_check
+`cf_case_check`
+===============
+http://github.com/rsutphin/cf_case_check
     
 Description
 -----------
 
-cf_case_check is a utility which walks a ColdFusion application's source and 
+`cf_case_check` is a utility which walks a ColdFusion application's source and 
 determines which references to other files will not work with a case-sensitive
 filesystem.  Its intended audience is developers/sysadmins who are migrating
 a CF application from Windows hosting to Linux or another UNIX.
@@ -15,10 +14,10 @@ Features
 --------
 
 * Resolves references of the following types:
-  - CF_-style custom tags
-  - cfinclude
-  - cfmodule (both template= and name=)
-  - createObject (for CFCs only)
+  - `CF_`-style custom tags
+  - `cfinclude`
+  - `cfmodule` (both `template` and `name`)
+  - `createObject` (for CFCs only)
 * Prints report to stdout
 * Allows for designation of custom tag & CFC search paths outside the 
   application root
@@ -26,11 +25,11 @@ Features
 Synopsis
 --------
 
- myapp$ cf_case_check
+    myapp$ cf_case_check
 
 For command-line options, do:
 
- $ cf_case_check --help
+    $ cf_case_check --help
 
 Requirements
 ------------
@@ -42,7 +41,7 @@ Install
 
 Follow the GitHub rubygems [setup directions](http://gems.github.com/), then
 
- $ sudo gem install rsutphin-cf_case_check
+    $ sudo gem install rsutphin-cf_case_check
 
 License
 -------
