@@ -1,32 +1,55 @@
 cf_case_check
-    by FIXME (your name)
-    FIXME (url)
+=============
+    by Rhett Sutphin
+    http://github.com/rsutphin/cf_case_check
+    
+Description
+-----------
 
-== DESCRIPTION:
+cf_case_check is a utility which walks a ColdFusion application's source and 
+determines which references to other files will not work with a case-sensitive
+filesystem.  Its intended audience is developers/sysadmins who are migrating
+a CF application from Windows hosting to Linux or another UNIX.
 
-FIXME (describe your package)
+Features
+--------
 
-== FEATURES/PROBLEMS:
+* Resolves references of the following types:
+  - CF_-style custom tags
+  - cfinclude
+  - cfmodule (both template= and name=)
+  - createObject (for CFCs only)
+* Prints report to stdout
+* Allows for designation of custom tag & CFC search paths outside the 
+  application root
 
-* FIXME (list of features or problems)
+Synopsis
+--------
 
-== SYNOPSIS:
+ myapp$ cf_case_check
 
-  FIXME (code sample of usage)
+For command-line options, do:
 
-== REQUIREMENTS:
+ $ cf_case_check --help
 
-* FIXME (list of requirements)
+Requirements
+------------
 
-== INSTALL:
+* Ruby 1.8.6 or later (may work with earlier, but not tested)
 
-* FIXME (sudo gem install, anything else)
+Install
+-------
 
-== LICENSE:
+Follow the GitHub rubygems [setup directions](http://gems.github.com/), then
+
+ $ sudo gem install rsutphin-cf_case_check
+
+License
+-------
 
 (The MIT License)
 
-Copyright (c) 2008 FIXME (different license?)
+Copyright (c) 2008 Rhett Sutphin
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
