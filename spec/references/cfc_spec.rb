@@ -59,4 +59,11 @@ describe CaseCheck::Cfc do
     actual_search.first.resolved_to.should == expected_file
     actual_search.first.resolution.should == :case_insensitive
   end
+  
+  it "resolves against a match in the same directory as the file" do
+    expected_file = File.join(File.dirname(@source.filename), 'bspore/Utils.cfc')
+    touch expected_file
+    actual_search.first.resolved_to.should == expected_file
+    actual_search.first.resolution.should == :exact
+  end
 end

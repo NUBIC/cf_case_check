@@ -25,12 +25,16 @@ module CaseCheck
     def initialize(source, text, line_number)
       super
       @expected_path = text.gsub('.', '/') + ".cfc"
-      @resolved_to = self.class.directories.inject(nil) do |resolved, dir|
+      @resolved_to = search_path.inject(nil) do |resolved, dir|
         resolved || resolve_in(dir)
       end
     end
     
     protected
+    
+    def search_path
+      [File.dirname(source.filename)] + self.class.directories
+    end
     
     def case_sensitive_match?
       return true if super
