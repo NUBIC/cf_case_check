@@ -47,6 +47,15 @@ describe CaseCheck::Configuration do
     YAML
     read_config
     CaseCheck::Reference.should have(1).substitutions
+  end
+  
+  it "interprets substitution patterns as case insensitive REs" do
+    config_file <<-YAML
+      substitutions:
+        '#application.cfcPath#': /var/www/cfcs
+    YAML
+    read_config
     CaseCheck::Reference.substitutions.first.should == [/#application.cfcPath#/i, '/var/www/cfcs']
+    CaseCheck::Reference.substitutions.first.first.should be_casefold
   end
 end
