@@ -28,3 +28,11 @@ PROJ.spec.opts << '--color'
 PROJ.rcov.opts << '--exclude /Library'
 
 PROJ.gem.dependencies << 'activesupport'
+
+desc 'Regenerate the gemspec for github'
+task :'gem:spec' => 'gem:prereqs' do
+  PROJ.gem._spec.files = PROJ.gem._spec.files.reject { |f| f =~ /^tasks/ }
+  File.open("#{PROJ.name}.gemspec", 'w') do |gemspec|
+    gemspec.puts PROJ.gem._spec.to_ruby
+  end
+end
