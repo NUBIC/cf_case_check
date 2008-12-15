@@ -50,7 +50,7 @@ module CaseCheck
   end
   
   def self.exit
-    exit
+    Kernel::exit
   end
 
 end  # module CaseCheck
