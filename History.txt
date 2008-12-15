@@ -1,4 +1,4 @@
-0.1.0 / 2008-12-
+0.1.0 / 2008-12-15
 ==================
 * Add support for configurable substitutions for, e.g., application variable 
   use in references
