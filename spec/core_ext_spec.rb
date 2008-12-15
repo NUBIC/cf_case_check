@@ -68,5 +68,32 @@ describe File, ' extensions ' do
       touch("baz/bar/foo/quux")
       File.case_insensitive_canonical_name(testfile("baz/bar/quod/../fOO/quux")).should == testfile("baz/bar/foo/quux")
     end
+    
+    describe "with symlinks" do
+      before do
+        @actual_dir = File.join(@tmpdir, "A")
+        FileUtils.mkdir_p @actual_dir
+        @linked_dir = File.join(@tmpdir, "B")
+        FileUtils.ln_s(@actual_dir, @linked_dir)
+      end
+      
+      it "finds exact matches" do
+        expected = File.join(@linked_dir, "foo.cfm")
+        FileUtils.touch expected
+        File.case_insensitive_canonical_name(expected).should == expected
+      end
+      
+      it "finds case-insensitive matches where the filename case differs" do
+        expected = File.join(@linked_dir, "Foo.cfm")
+        FileUtils.touch expected
+        File.case_insensitive_canonical_name(File.join(@linked_dir, "foo.cfm")).should == expected
+      end
+      
+      it "finds case-insensitive matches where the symlink case differs" do
+        expected = File.join(@linked_dir, "foo.cfm")
+        FileUtils.touch expected
+        File.case_insensitive_canonical_name(File.join(@tmpdir, 'b', "foo.cfm")).should == expected
+      end
+    end
   end
 end
