@@ -64,10 +64,15 @@ module CaseCheck
     def initialize(params)
       @params = params
       CaseCheck.status_stream.print "Reading source files "
-      @sources = Dir["#{params.directory}/**/*.cf[mc]"].collect do |f|
-        CaseCheck.status_stream.print '.'
-        ColdfusionSource.create(f)
-      end
+      @sources = extensions.collect { 
+        |ext| [ext, Dir.glob("#{params.directory}/**/*.#{ext}", File::FNM_CASEFOLD)]
+      }.collect do |ext, files|
+        CaseCheck.status_stream.print "#{ext}: " unless files.empty?
+        files.collect do |f|
+          CaseCheck.status_stream.print '.'
+          ColdfusionSource.create(f)
+        end
+      end.flatten
       CaseCheck.status_stream.puts
       CaseCheck.status_stream.print "Analyzing "
       @sources.each do |s|
@@ -84,6 +89,10 @@ module CaseCheck
     
     def reference_count
       sources.inject(0) { |c, s| c + s.internal_references.size }
+    end
+    
+    def extensions
+      %w(cfm cfc tem)
     end
   end
   

@@ -2,6 +2,9 @@
 ==================
 * Add support for configurable substitutions for, e.g., application variable 
   use in references
+* Include 'tem' (along with 'cfm' and 'cfc') in the list of extensions to use
+  when looking for CF source
+* Ensure that source filenames are globbed case-insensitively
 
 0.0.2 / 2008-12-15
 ==================
