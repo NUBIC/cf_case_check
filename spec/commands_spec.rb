@@ -31,7 +31,7 @@ describe CaseCheck::Params do
     
     it "reads the configuration directory/cf_case_check.yml" do
       config_file File.join(@dirname, "cf_case_check.yml"), <<-YAML
-        components:
+        cfc_directories:
           - /tmp/baz
       YAML
       actual_params('--dir', @dirname)
@@ -40,11 +40,11 @@ describe CaseCheck::Params do
     
     it "prefers an explicitly named configuration file if both are available" do
       config_file File.join(@dirname, "cf_case_check.yml"), <<-YAML
-        components:
+        cfc_directories:
           - /tmp/quux
       YAML
       config_file File.join(@dirname, "another.yml"), <<-YAML
-        components:
+        cfc_directories:
           - /tmp/qurt
       YAML
       actual_params('--dir', @dirname, '--config', File.join(@dirname, 'another.yml'))
@@ -56,7 +56,7 @@ describe CaseCheck::Params do
     before do
       @filename = "/tmp/foo.yml"
       config_file @filename, <<-YAML
-        components:
+        cfc_directories:
           - /tmp/bar
       YAML
       CaseCheck::Cfc.directories = nil

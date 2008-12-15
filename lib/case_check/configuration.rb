@@ -22,11 +22,11 @@ class Configuration
   end
   
   def read_custom_tag_dirs
-    CustomTag.directories = absolutize_directories(@doc['customtags'] || [])
+    CustomTag.directories = absolutize_directories(@doc['custom_tag_directories'] || [])
   end
   
   def read_cfc_dirs
-    Cfc.directories = absolutize_directories(@doc['components'] || [])
+    Cfc.directories = absolutize_directories(@doc['cfc_directories'] || [])
   end
   
   private

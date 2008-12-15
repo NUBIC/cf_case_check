@@ -21,9 +21,9 @@ describe CaseCheck::Configuration do
     CaseCheck::Configuration.new(@filename)
   end
   
-  it "reads customtag directories" do
+  it "reads custom tag directories" do
     config_file <<-YAML
-      customtags:
+      custom_tag_directories:
         - /var/www/customtags
         - /home/cf/customtags
     YAML
@@ -31,9 +31,9 @@ describe CaseCheck::Configuration do
     CaseCheck::CustomTag.directories.should == %w(/var/www/customtags /home/cf/customtags)
   end
   
-  it "resolves relative customtag directories against the config file directory" do
+  it "resolves relative custom tag directories against the config file directory" do
     config_file <<-YAML
-      customtags:
+      custom_tag_directories:
         - zappo/customtags
     YAML
     read_config
