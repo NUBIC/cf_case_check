@@ -1,6 +1,8 @@
 0.1.1 / 2009-09-23
 ==================
 * Support unquoted attributes in tags
+* Do not abort on an analysis exception -- print the exception and continue 
+  with the next file
 
 0.1.0 / 2008-12-15
 ==================
