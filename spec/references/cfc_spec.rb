@@ -11,6 +11,7 @@ describe CaseCheck::Cfc do
       <cfscript>
               utilsObj = CreateObject("component","bspore.Utils").init(datasource=application.personnel_db,username=session.netid,userIP=cgi.remote_addr);
               summaryObj = createObject("component","bspore.Summary").init(datasource=application.db,username=session.netid,userIP=cgi.remote_addr);
+              color = createObject("java","org.apache.poi.hssf.util.HSSFColor$CORAL");
       </cfscript>
     CFM
   end
@@ -29,6 +30,10 @@ describe CaseCheck::Cfc do
   
   it "finds multiple invocations" do
     actual_search.should have(2).references
+  end
+  
+  it "ignores java invocations" do
+    actual_search.detect { |s| s.expected_path =~ /CORAL/ }.should be_nil
   end
   
   it "finds lower case createObject style" do

@@ -14,11 +14,15 @@ module CaseCheck
       def search(source)
         source.scan(/createObject\((.*?)\)/mi) do |match, l|
           args = match[1].split(/\s*,\s*/).collect { |a| a.gsub(/['"]/, '') }
-          unless args.size == 2 && args.first =~ /component/i
+          if args.size == 2 && args.first =~ /component/i
+            new(source, args.last, l)
+          elsif args.first =~ /java/
+            # quietly skip
+          else
+            # loudly skip
             $stderr.puts "Non-CFC call on line #{l} of #{source.filename}: #{match[0]}"
           end
-          new(source, args.last, l)
-        end
+        end.compact
       end
     end
     
