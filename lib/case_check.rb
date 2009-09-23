@@ -1,7 +1,7 @@
 
 module CaseCheck
   # :stopdoc:
-  VERSION = '0.1.1'.freeze
+  VERSION = '0.1.2'.freeze
   LIBPATH = ::File.expand_path(::File.dirname(__FILE__)) + ::File::SEPARATOR
   PATH = ::File.dirname(LIBPATH) + ::File::SEPARATOR
   # :startdoc:
