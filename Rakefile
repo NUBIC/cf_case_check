@@ -22,7 +22,7 @@ PROJ.url = 'http://github.com/rsutphin/cf_case_check'
 PROJ.version = CaseCheck::VERSION
 # PROJ.rubyforge.name = 'cf_case_check'
 PROJ.description = "A utility which walks a ColdFusion application's source and determines which includes, custom tags, etc, will not work with a case-sensitive filesystem"
-PROJ.exclude << "gem$" << "gemspec$"
+PROJ.exclude << "gem$" << "gemspec$" << ".DS*"
 
 PROJ.ruby_opts = [] # There are a bunch of warnings in rspec, so setting -w isn't useful
 PROJ.spec.opts << '--color'
