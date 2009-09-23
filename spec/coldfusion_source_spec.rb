@@ -137,11 +137,22 @@ describe ColdfusionSource do
       actual = perform_scan(<<-CFM, "cfparam")
         <cfparam name ="foo" default= "42">
         <cfparam name="bar" default = "11">
+        <cfparam name= baz default = 19>
       CFM
-      actual.should have(2).matches
+      actual.should have(3).matches
       actual[0][:attributes].should == { :name => 'foo', :default => '42' }
       actual[1][:attributes].should == { :name => 'bar', :default => '11' }
-      actual[1][:line_number].should == 2
+      actual[2][:attributes].should == { :name => 'baz', :default => '19' }
+    end
+    
+    it "matches unquoted attributes" do
+      actual = perform_scan(<<-CFM, "cfinclude")
+        <cfinclude template=GetAccountIDStringMatch.cfm >
+        <cfinclude template=alpha option=beta>
+      CFM
+      actual.should have(2).matches
+      actual[0][:attributes].should == { :template => 'GetAccountIDStringMatch.cfm' }
+      actual[1][:attributes].should == { :template => 'alpha', :option => 'beta' }
     end
     
     it "downcases attribute keys" do

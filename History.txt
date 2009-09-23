@@ -1,3 +1,7 @@
+0.1.1 / 2009-09-23
+==================
+* Support unquoted attributes in tags
+
 0.1.0 / 2008-12-15
 ==================
 * Add support for configurable substitutions for, e.g., application variable 

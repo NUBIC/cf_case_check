@@ -16,8 +16,13 @@ class ColdfusionSource
   end
   
   def analyze
-    [CustomTag, Cfmodule, Cfinclude, Cfc].each do |reftype|
-      internal_references.concat reftype.search(self)
+    begin
+      [CustomTag, Cfmodule, Cfinclude, Cfc].each do |reftype|
+        internal_references.concat reftype.search(self)
+      end
+    rescue => e
+      $stderr.puts "Analyzing #{filename} failed: #{e}"
+      e.backtrace.each { |l| $stderr.puts "  #{l}" }
     end
   end
   
@@ -72,13 +77,21 @@ class ColdfusionSource
   # attributes, and the line number back to the provided block.
   def scan_for_tag(tag, &block)
     scan(/<#{tag}(.*?)>/mi) do |md, l|
-      attributes = %w(' ").collect do |q|
-        /(\w+)\s*=\s*#{q}([^#{q}]*?)#{q}/.scan(md[1].gsub(%r(/$), ''))
-      end.flatten.inject({}) do |attrs, amd|
+      attributes = ['"', "'", nil].collect { |q|
+        attribute_re(q).scan(md[1].gsub(%r(/$), ''))
+      }.flatten.inject({}) { |attrs, amd|
         attrs[normalize_attribute_key(amd[1])] = amd[2]
         attrs
-      end
+      }
       yield md[0], attributes, l
+    end
+  end
+  
+  def attribute_re(q)
+    if q
+      /(\w+)\s*=\s*#{q}([^#{q}]*?)#{q}/
+    else
+      /(\w+)\s*=\s*([^'"\s]+)/
     end
   end
   
